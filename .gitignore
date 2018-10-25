@@ -105,5 +105,6 @@ venv.bak/
 
 #myIgnores 
 .idea/ 
+.idea
 venv/
 .idea/workspace.xml
