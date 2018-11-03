@@ -133,3 +133,4 @@ venv.bak/
 venv/
 .idea/workspace.xml
 .idea/workspace.xml
+myPy.py
