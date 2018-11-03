@@ -137,7 +137,7 @@ def getLayout(name, back = 2):
         if layout == None: layout = tryToLoad(name + '.lay')
     if layout == None and back >= 0:
         curdir = os.path.abspath('.')
-        os.chdir('..')
+
         layout = getLayout(name, back -1)
         os.chdir(curdir)
     return layout

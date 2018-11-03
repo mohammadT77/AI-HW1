@@ -31,6 +31,7 @@ class SearchProblem:
         """
         Returns the start state for the search problem.
         """
+
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -72,6 +73,7 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -87,17 +89,58 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from util import Stack
+    closed = []
+    cn = (problem.getStartState(), None, None) #current node
+    parents = {}
+    fringe = Stack()
+    fringe.push(cn)
+    goal = None
+
+
+    while not fringe.isEmpty():
+        cn = fringe.pop()
+        # print("CN: "+str(cn)) #TODO trace
+        # print("\tFringe:" + str(fringe))  # TODO trace
+        # print("\tClosed:" +str(closed)) #TODO trace
+        if problem.isGoalState(cn[0]):
+            goal = cn
+            break
+        if cn not in closed:
+            closed.append(cn[0])
+            for child in problem.getSuccessors(cn[0]):
+                # print("\t>" + str(child))  # TODO trace
+                if (child[0] not in closed) and (child not in fringe.list):
+                    fringe.push(child)
+                    parents[child] = cn
+
+    """find Path from goal"""
+    if goal is None: return []
+    curr = goal
+    path = []
+    while curr[1] is not None:
+        path.append(curr[1])
+        curr = parents[curr]
+
+    return path[::-1] #return reverse Of path
+
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from util import Queue
+    cn = problem.getStartState()
+    fringe = Queue()
+
+
+
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # "*** YOUR CODE HERE ***"
+    # util.raiseNotDefined()
+
 
 def nullHeuristic(state, problem=None):
     """
