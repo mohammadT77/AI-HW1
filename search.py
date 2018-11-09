@@ -73,18 +73,25 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+def Path(parents, node):
+    path = []
+    while node[1] is not None:
+        path.append(node[1])
+        node = parents[node]
+    return path[::-1]
 
-def __GraphSearch(problem,fringeDataStructure):
-    fringe = fringeDataStructure()
+def __GraphSearch(problem,fringe):
     closed = []
     cn = (problem.getStartState(), None, None)  # current node
     parents = {}
     fringe.push(cn)
     goal = None
-
     while not fringe.isEmpty():
+
         cn = fringe.pop()
+
         # print("CN: "+str(cn)) #TODO trace
+        # print("Cost: " + str(len(findPath(parents,cn))))   # TODO trace
         # print("\tFringe:" + str(fringe))  # TODO trace
         # print("\tClosed:" +str(closed)) #TODO trace
         if problem.isGoalState(cn[0]):
@@ -94,19 +101,21 @@ def __GraphSearch(problem,fringeDataStructure):
             closed.append(cn[0])
             for child in problem.getSuccessors(cn[0]):
                 # print("\t>" + str(child))  # TODO trace
-                if (child[0] not in closed) and (child not in fringe.list):
+                if (child[0] not in closed):
                     fringe.push(child)
                     parents[child] = cn
 
-    """find Path from goal"""
-    if goal is None: return []
-    curr = goal
-    path = []
-    while curr[1] is not None:
-        path.append(curr[1])
-        curr = parents[curr]
+    # """find Path from goal"""
+    # pathX = lambda curr_node: [curr_node[1] while (curr_node=parents[curr_node])  in range(2)]
+    # if goal is None: return []
+    # curr = goal
+    # pathX = []
+    # while curr[1] is not None:
+    #     pathX.append(curr[1])
+    #     curr = parents[curr]
+    # print
+    return Path(parents,goal)
 
-    return path[::-1]  # return reverse Of path
 
 def depthFirstSearch(problem):
     """
@@ -123,8 +132,7 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    from util import Stack
-    return __GraphSearch(problem,Stack)
+    return __GraphSearch(problem,util.Stack())
     # fringe = Stack()
     # closed = []
     # cn = (problem.getStartState(), None, None)  # current node
@@ -162,8 +170,7 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    from util import Queue
-    return __GraphSearch(problem,Queue)
+    return __GraphSearch(problem,util.Queue())
     # fringe = Queue()
     # closed = []
     # cn = (problem.getStartState(), 'Stop', 1)  # current node
@@ -199,24 +206,10 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    from util import PriorityQueue
-    Gn = problem.getCostOfActions
-    fringe = PriorityQueue()
-    closed = []
-    cn = (problem.getStartState(), 'Stop', 1)  # current node
-    fringe.push(cn,0)
-    goal = None
-    path = []
-    while True:
-        if fringe.isEmpty(): return []
-        cn = fringe.pop()
-        path.append(cn[1])
-        if problem.isGoalState(cn[0]):
-            goal = cn
-            break
-        # if
+    Gn = lambda Path:len(Path)
 
-    return ['Stop']
+
+    return __GraphSearch(problem,util.PriorityQueueWithFunction(Gn))
 
 
 def nullHeuristic(state, problem=None):
