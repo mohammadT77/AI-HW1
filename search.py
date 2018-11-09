@@ -73,16 +73,17 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def Path(parents, node):
-    path = []
-    while node[1] is not None:
-        path.append(node[1])
-        node = parents[node]
-    return path[::-1]
+
 
 def __GraphSearch(problem,fringe):
+    def Path(parents, node):
+        path = []
+        while node[1] is not None:
+            path.append(node[1])
+            node = parents[node[0:2]]
+        return path[::-1]
     closed = []
-    cn = (problem.getStartState(), None, None)  # current node
+    cn = (problem.getStartState(), None, None,[])  # current node
     parents = {}
     fringe.push(cn)
     goal = None
@@ -91,7 +92,7 @@ def __GraphSearch(problem,fringe):
         cn = fringe.pop()
 
         # print("CN: "+str(cn)) #TODO trace
-        # print("Cost: " + str(len(findPath(parents,cn))))   # TODO trace
+        # print("Cost: " + str(len(Path(parents,cn))))   # TODO trace
         # print("\tFringe:" + str(fringe))  # TODO trace
         # print("\tClosed:" +str(closed)) #TODO trace
         if problem.isGoalState(cn[0]):
@@ -102,8 +103,13 @@ def __GraphSearch(problem,fringe):
             for child in problem.getSuccessors(cn[0]):
                 # print("\t>" + str(child))  # TODO trace
                 if (child[0] not in closed):
+                    # print("\t>" + str(child))  # TODO trace
+                    parents[child[0:2]] = cn
+                    path = Path(parents,child)
+                    child = child + (path,)
+
                     fringe.push(child)
-                    parents[child] = cn
+
 
     # """find Path from goal"""
     # pathX = lambda curr_node: [curr_node[1] while (curr_node=parents[curr_node])  in range(2)]
@@ -206,7 +212,7 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    Gn = lambda Path:len(Path)
+    Gn = lambda cn:len(cn[3])
 
 
     return __GraphSearch(problem,util.PriorityQueueWithFunction(Gn))
