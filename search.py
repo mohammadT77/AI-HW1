@@ -74,6 +74,40 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 
+def __GraphSearch(problem,fringeDataStructure):
+    fringe = fringeDataStructure()
+    closed = []
+    cn = (problem.getStartState(), None, None)  # current node
+    parents = {}
+    fringe.push(cn)
+    goal = None
+
+    while not fringe.isEmpty():
+        cn = fringe.pop()
+        # print("CN: "+str(cn)) #TODO trace
+        # print("\tFringe:" + str(fringe))  # TODO trace
+        # print("\tClosed:" +str(closed)) #TODO trace
+        if problem.isGoalState(cn[0]):
+            goal = cn
+            break
+        if cn not in closed:
+            closed.append(cn[0])
+            for child in problem.getSuccessors(cn[0]):
+                # print("\t>" + str(child))  # TODO trace
+                if (child[0] not in closed) and (child not in fringe.list):
+                    fringe.push(child)
+                    parents[child] = cn
+
+    """find Path from goal"""
+    if goal is None: return []
+    curr = goal
+    path = []
+    while curr[1] is not None:
+        path.append(curr[1])
+        curr = parents[curr]
+
+    return path[::-1]  # return reverse Of path
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -90,84 +124,99 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
     from util import Stack
-    fringe = Stack()
-    closed = []
-    cn = (problem.getStartState(), None, None) #current node
-    parents = {}
-    fringe.push(cn)
-    goal = None
-
-
-    while not fringe.isEmpty():
-        cn = fringe.pop()
-        # print("CN: "+str(cn)) #TODO trace
-        # print("\tFringe:" + str(fringe))  # TODO trace
-        # print("\tClosed:" +str(closed)) #TODO trace
-        if problem.isGoalState(cn[0]):
-            goal = cn
-            break
-        if cn not in closed:
-            closed.append(cn[0])
-            for child in problem.getSuccessors(cn[0]):
-                # print("\t>" + str(child))  # TODO trace
-                if (child[0] not in closed) and (child not in fringe.list):
-                    fringe.push(child)
-                    parents[child] = cn
-
-    """find Path from goal"""
-    if goal is None: return []
-    curr = goal
-    path = []
-    while curr[1] is not None:
-        path.append(curr[1])
-        curr = parents[curr]
-
-    return path[::-1] #return reverse Of path
+    return __GraphSearch(problem,Stack)
+    # fringe = Stack()
+    # closed = []
+    # cn = (problem.getStartState(), None, None)  # current node
+    # parents = {}
+    # fringe.push(cn)
+    # goal = None
+    #
+    # while not fringe.isEmpty():
+    #     cn = fringe.pop()
+    #     # print("CN: "+str(cn)) #TODO trace
+    #     # print("\tFringe:" + str(fringe))  # TODO trace
+    #     # print("\tClosed:" +str(closed)) #TODO trace
+    #     if problem.isGoalState(cn[0]):
+    #         goal = cn
+    #         break
+    #     if cn not in closed:
+    #         closed.append(cn[0])
+    #         for child in problem.getSuccessors(cn[0]):
+    #             # print("\t>" + str(child))  # TODO trace
+    #             if (child[0] not in closed) and (child not in fringe.list):
+    #                 fringe.push(child)
+    #                 parents[child] = cn
+    #
+    # """find Path from goal"""
+    # if goal is None: return []
+    # curr = goal
+    # path = []
+    # while curr[1] is not None:
+    #     path.append(curr[1])
+    #     curr = parents[curr]
+    #
+    # return path[::-1]  # return reverse Of path
 
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     from util import Queue
-    fringe = Queue()
-    closed = []
-    cn = (problem.getStartState(), None, None)  # current node
-    parents = {}
-    fringe.push(cn)
-    goal = None
-    while not fringe.isEmpty():
-        cn = fringe.pop()
-        # print("CN: "+str(cn)) #TODO trace
-        # print("\tFringe:" + str(fringe))  # TODO trace
-        # print("\tClosed:" +str(closed)) #TODO trace
-        if problem.isGoalState(cn[0]):
-            goal = cn
-            break
-        if cn not in closed:
-            closed.append(cn[0])
-            for child in problem.getSuccessors(cn[0]):
-                # print("\t>" + str(child))  # TODO trace
-                if (child[0] not in closed) and (child not in fringe.list):
-                    fringe.push(child)
-                    parents[child] = cn
-
-    """find Path from goal"""
-    if goal is None: return []
-    curr = goal
-    path = []
-    while curr[1] is not None:
-        path.append(curr[1])
-        curr = parents[curr]
-
-    return path[::-1] #return reverse Of path
-
-
+    return __GraphSearch(problem,Queue)
+    # fringe = Queue()
+    # closed = []
+    # cn = (problem.getStartState(), 'Stop', 1)  # current node
+    # parents = {}
+    # fringe.push(cn)
+    # goal = None
+    # while not fringe.isEmpty():
+    #     cn = fringe.pop()
+    #     # print("CN: "+str(cn)) #TODO trace
+    #     # print("\tFringe:" + str(fringe))  # TODO trace
+    #     # print("\tClosed:" +str(closed)) #TODO trace
+    #     if problem.isGoalState(cn[0]):
+    #         goal = cn
+    #         break
+    #     if cn not in closed:
+    #         closed.append(cn[0])
+    #         for child in problem.getSuccessors(cn[0]):
+    #             # print("\t>" + str(child))  # TODO trace
+    #             if (child[0] not in closed) and (child not in fringe.list):
+    #                 fringe.push(child)
+    #                 parents[child] = cn
+    #
+    # """find Path from goal"""
+    # if goal is None: return []
+    # curr = goal
+    # path = []
+    # while curr[1] is not None:
+    #     path.append(curr[1])
+    #     curr = parents[curr]
+    #
+    # return path[::-1] #return reverse Of path
 
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    # "*** YOUR CODE HERE ***"
-    # util.raiseNotDefined()
+    from util import PriorityQueue
+    Gn = problem.getCostOfActions
+    fringe = PriorityQueue()
+    closed = []
+    cn = (problem.getStartState(), 'Stop', 1)  # current node
+    fringe.push(cn,0)
+    goal = None
+    path = []
+    while True:
+        if fringe.isEmpty(): return []
+        cn = fringe.pop()
+        path.append(cn[1])
+        if problem.isGoalState(cn[0]):
+            goal = cn
+            break
+        # if
+
+    return ['Stop']
 
 
 def nullHeuristic(state, problem=None):
