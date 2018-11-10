@@ -212,7 +212,7 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    Gn = lambda cn:len(cn[3])
+    Gn = lambda cn:problem.getCostOfActions(cn[3])
 
 
     return __GraphSearch(problem,util.PriorityQueueWithFunction(Gn))
