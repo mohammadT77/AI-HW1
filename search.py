@@ -92,14 +92,15 @@ def __GraphSearch(problem,fringe):
         parents = fringe.pop()
         # parents.append(cn)
         cn=parents[-1]
-        print("CN: "+str(cn)) #TODO trace
+        # print("CN: "+str(cn)) #TODO trace
         # print("Cost: " + str(len(Path(parents,cn))))   # TODO trace
         # print("\tFringe:" + str(fringe.list))  # TODO trace
         # print("\tClosed:" +str(closed)) #TODO trace
         if problem.isGoalState(cn[0]):
+            # return [i[1] for i in parents][1:]
             goal = cn
             break
-        if cn not in closed:
+        if cn[0] not in closed:
             closed.append(cn[0])
             for child in problem.getSuccessors(cn[0]):
                 # print("\t>" + str(child))  # TODO trace
