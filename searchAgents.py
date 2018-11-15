@@ -456,6 +456,7 @@ def foodHeuristic(state, problem):
     "*** YOUR CODE HERE ***"
     return 0
 
+
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
     def registerInitialState(self, state):
