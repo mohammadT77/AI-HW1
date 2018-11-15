@@ -106,9 +106,6 @@ def __GraphSearch(problem,fringe):
                 # print("\t>" + str(child))  # TODO trace
                 if (child[0] not in closed):
                     # print("\t>" + str(child))  # TODO trace
-                    # parents[child[0:2]] = cn
-                    # path = Path(parents,child)
-                    # child = child + (path,)
 
                     fringe.push(parents+[child,])
 
@@ -238,7 +235,11 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    Gn = lambda n: problem.getCostOfActions([i[1] for i in n][1:])
+    Hn = heuristic
+    Fn = lambda n: Gn(n) + Hn(n[-1][0],problem)
+    return __GraphSearch(problem, util.PriorityQueueWithFunction(Fn))
+
 
 
 # Abbreviations
