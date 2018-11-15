@@ -458,11 +458,6 @@ def foodHeuristic(state, problem):
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
-    def __init__(self):
-        # self.searchFunction = search.aStarSearch
-        self.searchType = lambda state: AnyFoodSearchProblem(state)
-        self.searchFunction = search.greedySearch
-
     def registerInitialState(self, state):
         self.actions = []
         currentState = state
@@ -490,7 +485,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        return self.searchFunction(problem)
+        return search.bfs(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """

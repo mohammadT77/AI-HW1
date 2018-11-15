@@ -240,9 +240,9 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     Fn = lambda n: Gn(n) + Hn(n[-1][0],problem)
     return __GraphSearch(problem, util.PriorityQueueWithFunction(Fn))
 
-def greedySearch(problem,heuristic=nullHeuristic):
-    Hn = lambda n: heuristic(n[-1][0], problem)
-    return __GraphSearch(problem, util.PriorityQueueWithFunction(Hn))
+# def greedySearch(problem,heuristic=nullHeuristic):
+#     Hn = lambda n: heuristic(n[-1][0], problem)
+#     return __GraphSearch(problem, util.PriorityQueueWithFunction(Hn))
 
 
 # Abbreviations
